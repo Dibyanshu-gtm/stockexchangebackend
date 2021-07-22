@@ -16,7 +16,7 @@ public class CompanyStockExchangeMapController {
     @Autowired
     CompanyStockexchangemapRepository companyStockexchangemapRepository;
 
-    @CrossOrigin(origins ={"http://127.0.0.1:3000","http://localhost:3000/"})
+    @CrossOrigin(origins ={"http://127.0.0.1:3000","http://localhost:3000/","https://stockexchangebackend.herokuapp.com"})
     @RequestMapping(value = "/getcompanyname/{code}", method = RequestMethod.GET)
     public ResponseEntity<?>getCompanyName(@PathVariable String code, @RequestParam(name="exchangename") String exchangename) {
 

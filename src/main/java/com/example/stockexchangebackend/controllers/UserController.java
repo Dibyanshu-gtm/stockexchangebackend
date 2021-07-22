@@ -27,7 +27,7 @@ public class UserController {
     @Autowired
     UserRepository userRepository;
 
-    @CrossOrigin(origins ={"http://127.0.0.1:3000","http://localhost:3000/"})
+    @CrossOrigin(origins ={"http://127.0.0.1:3000","http://localhost:3000/","https://stockexchangebackend.herokuapp.com"})
     @RequestMapping(value = "/setuserapi",method= RequestMethod.POST)
     public ResponseEntity<?> Stringreactuserapi(@RequestBody User1 user) throws AddressException {
         user.setAdmin(false);
@@ -102,7 +102,7 @@ public class UserController {
             e.printStackTrace();
         }
     }
-    @CrossOrigin(origins ="http://localhost:3000")
+    @CrossOrigin(origins ={"http://localhost:3000","https://stockexchangebackend.herokuapp.com"})
     @RequestMapping(value="/confirmuser/{userid}", method=RequestMethod.GET)
     public String welcomepage(@PathVariable Long userid) {
         Optional<User1> userlist =   userRepository.findById(userid);
@@ -114,7 +114,7 @@ public class UserController {
         return "User confirmed" +usr.getUsername() +" Get back to the login Page <a href =\"http://127.0.0.1:3000/login\"> Click to Login Page </a> ";
     }
 
-    @CrossOrigin(origins ={"http://127.0.0.1:3000","http://localhost:3000/"})
+    @CrossOrigin(origins ={"http://127.0.0.1:3000","http://localhost:3000/","https://stockexchangebackend.herokuapp.com"})
     @RequestMapping(value="/signin",method = RequestMethod.POST)
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest){
 
