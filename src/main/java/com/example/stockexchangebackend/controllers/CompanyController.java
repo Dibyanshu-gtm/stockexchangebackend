@@ -79,7 +79,7 @@ public class CompanyController {
         return companyService.getipo(name);
     }
 
-    @CrossOrigin(origins ={"http://127.0.0.1:3000","http://localhost:3000/","https://stockexchangebackend.herokuapp.com"})
+    @CrossOrigin(origins ={"http://127.0.0.1:3000","http://localhost:3000/","https://stockexchangefrontend.herokuapp.com"})
     @RequestMapping(value="/getpricedate/{name}",method = RequestMethod.GET)
     public ResponseEntity<List<PriceResponse>>getStockPrice(@PathVariable String name, @RequestParam(name = "from")String from, @RequestParam(name = "todate")String todate, @RequestParam(name="exchangename")String exchangename) throws ParseException {
         DateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd");
@@ -90,7 +90,7 @@ public class CompanyController {
         }
         return new ResponseEntity<List<PriceResponse>>(resp,HttpStatus.OK);
     }
-    @CrossOrigin(origins ={"http://127.0.0.1:3000","http://localhost:3000/","https://stockexchangebackend.herokuapp.com"})
+    @CrossOrigin(origins ={"http://127.0.0.1:3000","http://localhost:3000/","https://stockexchangefrontend.herokuapp.com"})
     @RequestMapping(value="/getpriceyear/{name}",method = RequestMethod.GET)
     public ResponseEntity<List<PriceResponse>>getStockPriceyear(@PathVariable String name,@RequestParam(name = "from")String from, @RequestParam(name = "todate")String todate,@RequestParam(name="exchangename")String exchangename) throws ParseException {
         DateFormat dateFormat= new SimpleDateFormat("yyyy");
@@ -101,7 +101,7 @@ public class CompanyController {
         }
         return new ResponseEntity<List<PriceResponse>>(resp,HttpStatus.OK);
     }
-    @CrossOrigin(origins ={"http://127.0.0.1:3000","http://localhost:3000/","https://stockexchangebackend.herokuapp.com"})
+    @CrossOrigin(origins ={"http://127.0.0.1:3000","http://localhost:3000/","https://stockexchangefrontend.herokuapp.com"})
     @RequestMapping(value="/getpricetime/{name}",method = RequestMethod.GET)
     public ResponseEntity<List<PriceResponse>>getStockPriceyear(@PathVariable String name,@RequestParam(name = "from")String from,@RequestParam(name="exchangename")String exchangename) throws ParseException {
         DateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd");
