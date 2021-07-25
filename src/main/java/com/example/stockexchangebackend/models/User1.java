@@ -2,6 +2,8 @@ package com.example.stockexchangebackend.models;
 
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "User1")
@@ -15,7 +17,12 @@ public class User1 {
     private String email;
     private Boolean confirmed;
     private Boolean Admin;
-    private String Role;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(	name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
 
     public  User1(){
         super();
@@ -77,11 +84,11 @@ public class User1 {
         Admin = admin;
     }
 
-    public String getRole() {
-        return Role;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setRole(String role) {
-        Role = role;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }

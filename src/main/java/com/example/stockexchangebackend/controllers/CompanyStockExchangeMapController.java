@@ -7,6 +7,7 @@ import com.example.stockexchangebackend.repositories.CompanyStockexchangemapRepo
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
@@ -17,6 +18,7 @@ public class CompanyStockExchangeMapController {
     CompanyStockexchangemapRepository companyStockexchangemapRepository;
 
     @CrossOrigin(origins ={"http://127.0.0.1:3000","http://localhost:3000/","https://stockexchangefrontend.herokuapp.com"})
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
     @RequestMapping(value = "/getcompanyname/{code}", method = RequestMethod.GET)
     public ResponseEntity<?>getCompanyName(@PathVariable String code, @RequestParam(name="exchangename") String exchangename) {
 

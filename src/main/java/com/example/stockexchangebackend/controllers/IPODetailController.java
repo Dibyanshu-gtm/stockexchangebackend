@@ -9,6 +9,7 @@ import com.example.stockexchangebackend.repositories.StockExchangeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.DateFormat;
@@ -27,6 +28,8 @@ public class IPODetailController {
     IPODetailRepository ipoDetailRepository;
     @Autowired
     CompanyStockexchangemapRepository companyStockexchangemapRepository;
+
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @RequestMapping(value = "/ipo",method = RequestMethod.POST)
     public String addIPODetail(@RequestBody Map<String,String> text) throws ParseException {
 
@@ -89,6 +92,8 @@ public class IPODetailController {
         }
         return "Done";
     }
+
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
     @RequestMapping(value = "/ipodetails",method = RequestMethod.GET)
     public ResponseEntity<List<IPOResponse>>getIpoDetail()
     {
@@ -113,6 +118,8 @@ public class IPODetailController {
         }
         return new ResponseEntity<List<IPOResponse>>(ipList,HttpStatus.OK);
     }
+
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
     @RequestMapping(value = "/ipodetails/{id}",method = RequestMethod.GET)
     public ResponseEntity<?>getIpoById(@PathVariable Long id)
     {

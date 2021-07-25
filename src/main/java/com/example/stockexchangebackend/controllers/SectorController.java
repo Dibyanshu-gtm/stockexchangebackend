@@ -9,6 +9,7 @@ import com.example.stockexchangebackend.services.SectorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.DateFormat;
@@ -26,10 +27,12 @@ public class SectorController {
     @Autowired
     SectorService sectorService;
     @RequestMapping(value = "/sector", method = RequestMethod.POST)
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String addSector(@RequestBody Sector sector){
         sectorRepository.save(sector);
         return "Done";
     }
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
     @RequestMapping(value = "/sector/{id}", method = RequestMethod.GET)
     public ResponseEntity<List<Company>> getSector(@PathVariable long id){
         Sector sector = sectorRepository.findById(id).get();
@@ -40,6 +43,7 @@ public class SectorController {
         }
         return new ResponseEntity<List<Company>>(companies,HttpStatus.OK);
     }
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
     @RequestMapping(value = "/sector",method = RequestMethod.GET)
     public ResponseEntity<List<Sector>> getSectors()
     {
@@ -50,6 +54,7 @@ public class SectorController {
         }
         return new ResponseEntity<List<Sector>>(sectorList,HttpStatus.OK);
     }
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
     @RequestMapping(value = "/getsector/{id}",method = RequestMethod.GET)
     public ResponseEntity<?>getSectorId(@PathVariable Long id)
     {
@@ -62,6 +67,7 @@ public class SectorController {
     }
 
     @PutMapping(value = "/sector/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Sector> editSector(@RequestBody Sector sector)
     {
         Sector s = sectorRepository.findById(sector.getId()).get();
@@ -75,6 +81,7 @@ public class SectorController {
         return ResponseEntity.ok().body(s);
     }
     @CrossOrigin(origins ={"http://127.0.0.1:3000","http://localhost:3000/","https://stockexchangefrontend.herokuapp.com"})
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
     @RequestMapping(value = "/getsectorpricedate/{name}",method = RequestMethod.GET)
     public ResponseEntity<List<PriceResponse>> getSectorPrice(@PathVariable String name, @RequestParam(name = "from")String from, @RequestParam(name = "todate")String todate, @RequestParam(name="exchangename")String exchangename) throws ParseException {
         DateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd");
@@ -87,6 +94,7 @@ public class SectorController {
     }
 
     @CrossOrigin(origins ={"http://127.0.0.1:3000","http://localhost:3000/","https://stockexchangefrontend.herokuapp.com"})
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
     @RequestMapping(value = "/getsectorpriceyear/{name}")
     public ResponseEntity<List<PriceResponse>>getSectorPriceyear(@PathVariable String name,@RequestParam(name = "from")String from, @RequestParam(name = "todate")String todate,@RequestParam(name="exchangename")String exchangename) throws ParseException {
         DateFormat dateFormat= new SimpleDateFormat("yyyy");

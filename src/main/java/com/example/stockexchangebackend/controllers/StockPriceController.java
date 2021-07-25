@@ -6,6 +6,7 @@ import com.example.stockexchangebackend.repositories.CompanyStockexchangemapRepo
 import com.example.stockexchangebackend.repositories.StockExchangeRepository;
 import com.example.stockexchangebackend.repositories.StockPriceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.DateFormat;
@@ -24,6 +25,8 @@ public class StockPriceController {
     CompanyStockexchangemapRepository companyStockexchangemapRepository;
     @Autowired
     StockExchangeRepository stockExchangeRepository;
+
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
     @RequestMapping(value = "/price",method = RequestMethod.POST)
     public String addStockPrice(@RequestBody Map<String,String> text) throws ParseException {
         DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
