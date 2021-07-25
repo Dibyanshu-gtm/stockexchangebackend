@@ -94,7 +94,7 @@ public class UserController {
             //     message.setText("Dear Mail Crawler,"
             //           + "\n\n Please do not spam my email!");
             message.setContent(
-                    "<h1><a href =\"http://127.0.0.1:8080/confirmuser/"+userid+"/\"> Click to confirm </a></h1>",
+                    "<h1><a href =\"https://stockexchangebackend.herokuapp.com/confirmuser/"+userid+"/\"> Click to confirm </a></h1>",
                     "text/html");
             Transport.send(message);
 
@@ -113,7 +113,7 @@ public class UserController {
         usr = userRepository.getById(userid);
         usr.setConfirmed(true);
         userRepository.save(usr);
-        return "User confirmed" +usr.getUsername() +" Get back to the login Page <a href =\"https://stockexchangefrontend.herokuapp.com/login\"> Click to Login Page </a> ";
+        return "User confirmed" +usr.getUsername() +" Get back to the login Page <a href =\"https://stockexchangebackend.herokuapp.com/login\"> Click to Login Page </a> ";
     }
 
     @CrossOrigin(origins ={"http://127.0.0.1:3000","http://localhost:3000/","https://stockexchangefrontend.herokuapp.com"})
