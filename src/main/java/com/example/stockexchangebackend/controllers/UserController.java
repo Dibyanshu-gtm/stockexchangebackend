@@ -69,6 +69,7 @@ public class UserController {
         prop.put("mail.smtp.port", "587");
         prop.put("mail.smtp.auth", "true");
         prop.put("mail.smtp.starttls.enable", "true"); //TLS
+        prop.put("mail.smtp.ssl.protocols", "TLSv1.2");
 
         Session session = Session.getInstance(prop,
                 new javax.mail.Authenticator() {
