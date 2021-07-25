@@ -88,18 +88,6 @@ public class CompanyServiceImpl implements CompanyService{
     }
 
     @Override
-    public String getipo(String name) {
-        IPODetail ipo = companyRepository.findByName(name).getIpo();
-        String x="";
-        List<StockExchange>st= ipo.getStockExchange();
-        for(StockExchange s :st)
-        {
-            x=x+s.getName();
-        }
-        return x;
-    }
-
-    @Override
     public List<PriceResponse> getCompanyStockPriceDate(String name, Date FromDate, Date ToDate,String exchangename) {
         CompanyStockexchangemap cm= companyStockexchangemapRepository.findByCompanyNameAndStockExchange(name,exchangename);
         List<PriceResponse>reslist = new ArrayList<>();
@@ -145,10 +133,16 @@ public class CompanyServiceImpl implements CompanyService{
             current = calendar.getTime();
         }
         float num= 0.0f;
+        int avg=1;
         if(map.containsKey(df.format(end)))
         {
             num=map.get(df.format(end));
         }
+        if(countmap.containsKey(df.format(end)))
+        {
+            avg= countmap.get(df.format(end));
+        }
+        num=num/avg;
         reslist.add(new PriceResponse(df.format(end),num));
         return reslist;
     }
@@ -250,6 +244,74 @@ public class CompanyServiceImpl implements CompanyService{
         comp.setCompanyBrief(companyBrief);
         return companyRepository.save(comp);
         //return comp;
+    }
+
+    @Override
+    public List<CompanyResponse> getCompanies() {
+        List<Company> companies = companyRepository.findAll();
+        List<CompanyResponse>resList = new ArrayList<>();
+        String ex="";
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        for(Company c : companies)
+        {
+            List<StockExchange>sc = c.getIpo().getStockExchange();
+            for(StockExchange s:sc)
+            {
+                ex=ex+" "+s.getName();
+            }
+            resList.add(new CompanyResponse(c.getId(),c.getCompanyName(),c.getTurnover(),c.getCeo(),c.getBoardOfDirectors(),c.getCompanyBrief(),c.getIpo().getPricePerShare(),c.getIpo().getTotalNumberOfShares(), formatter.format( c.getIpo().getOpenDateTime()),ex));
+            ex="";
+        }
+        return resList;
+    }
+
+    @Override
+    public String deleteCompany(Long id) {
+        Company company=companyRepository.getById(id);
+        IPODetail ipo = company.getIpo();
+
+        String x="Done";
+
+        List<CompanyStockexchangemap>companyStockexchangemapList=companyStockexchangemapRepository.findAll();
+        for (CompanyStockexchangemap companyStockexchangemap: companyStockexchangemapList)
+        {
+            if(companyStockexchangemap.getCompany().equals(company))
+            {
+                companyStockexchangemap.setCompany(null);
+                Long idcheck = companyStockexchangemap.getId();
+                //x=x+idcheck+" "+companyStockexchangemap.getStockExchange().getName();
+                StockExchange exchange = stockExchangeRepository.findByName(companyStockexchangemap.getStockExchange().getName());
+                List<CompanyStockexchangemap>cs=exchange.getCompstockmap();
+                List<IPODetail> ipoList = exchange.getIpoDetail();
+                cs.remove(companyStockexchangemap);
+                ipoList.remove(ipo);
+                exchange.setCompstockmap(cs);
+                exchange.setIpoDetail(ipoList);
+
+                stockExchangeRepository.save(exchange);
+                companyStockexchangemapRepository.deleteById(idcheck);
+
+            }
+        }
+        List<StockPrice>stockPrices= stockPriceRepository.findAll();
+        for(StockPrice st: stockPrices)
+        {
+            if(st.getCompany().equals(company))
+            {
+                stockPriceRepository.deleteById(st.getId());
+            }
+        }
+        ipoDetailRepository.deleteById(ipo.getId());
+        Sector sec =sectorRepository.findBySectorName(company.getSector().getSectorName());
+        List<Company> companies= sec.getCompanies();
+        companies.remove(company);
+        sec.setCompanies(companies);
+
+
+
+        companyRepository.deleteById(id);
+        return x;
+
     }
 
 }

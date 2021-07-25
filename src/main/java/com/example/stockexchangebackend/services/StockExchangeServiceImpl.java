@@ -44,15 +44,5 @@ public class StockExchangeServiceImpl implements StockExchangeService{
         return  comp;
     }
 
-    @Override
-    public String getipodetails(String name) {
-        StockExchange exchange= stockExchangeRepository.findByName(name);
-        List<IPODetail>ipolist=exchange.getIpoDetail();
-        String x= "";
-        for(IPODetail i : ipolist)
-        {
-            x=x+i.getCompany().getCompanyName();
-        }
-        return x;
-    }
+
 }

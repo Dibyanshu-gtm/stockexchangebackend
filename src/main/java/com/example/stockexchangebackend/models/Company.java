@@ -37,7 +37,7 @@ public class Company {
     @JsonIgnore
     private IPODetail ipo;
 
-    @OneToMany(targetEntity = CompanyStockexchangemap.class)
+    @OneToMany(targetEntity = CompanyStockexchangemap.class,orphanRemoval = true, cascade = CascadeType.PERSIST)
     private List<CompanyStockexchangemap> compstockmap;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -45,7 +45,7 @@ public class Company {
     private Sector sector;
 
     //addStockprice
-    protected Company(){
+    public Company(){
 
     }
 
@@ -120,6 +120,14 @@ public class Company {
 
     public void setCompanyBrief(String companyBrief) {
         this.companyBrief = companyBrief;
+    }
+
+    public List<CompanyStockexchangemap> getCompstockmap() {
+        return compstockmap;
+    }
+
+    public void setCompstockmap(List<CompanyStockexchangemap> compstockmap) {
+        this.compstockmap = compstockmap;
     }
 }
 

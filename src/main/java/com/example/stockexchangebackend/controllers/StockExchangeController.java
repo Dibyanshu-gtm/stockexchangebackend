@@ -41,9 +41,5 @@ public class StockExchangeController {
         }
         return new ResponseEntity<List<Company>>(companies,HttpStatus.OK);
     }
-    @RequestMapping(value = "/stipo/{name}",method =RequestMethod.GET)
-    public String getipo(@PathVariable String  name)
-    {
-        return stockExchangeService.getipodetails(name);
-    }
+
 }

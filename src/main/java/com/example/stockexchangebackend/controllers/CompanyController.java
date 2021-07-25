@@ -2,6 +2,7 @@ package com.example.stockexchangebackend.controllers;
 
 
 import com.example.stockexchangebackend.models.Company;
+import com.example.stockexchangebackend.models.CompanyResponse;
 import com.example.stockexchangebackend.models.IPODetail;
 import com.example.stockexchangebackend.models.PriceResponse;
 import com.example.stockexchangebackend.services.CompanyService;
@@ -24,6 +25,7 @@ public class CompanyController {
 
     @Autowired
     CompanyService companyService;
+
     @RequestMapping(value = "/company",method = RequestMethod.POST)
     public String addCompany(@RequestBody Map<String,String> text) throws ParseException {
 
@@ -73,11 +75,7 @@ public class CompanyController {
         }
         return new ResponseEntity<List<IPODetail>>(info,HttpStatus.OK);
     }
-    @RequestMapping(value = "/getipo/{name}",method =RequestMethod.GET)
-    public String getDetails(@PathVariable String name)
-    {
-        return companyService.getipo(name);
-    }
+
 
     @CrossOrigin(origins ={"http://127.0.0.1:3000","http://localhost:3000/","https://stockexchangefrontend.herokuapp.com"})
     @RequestMapping(value="/getpricedate/{name}",method = RequestMethod.GET)
@@ -111,6 +109,20 @@ public class CompanyController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<List<PriceResponse>>(resp,HttpStatus.OK);
+    }
+    @RequestMapping(value = "/companies",method = RequestMethod.GET)
+    public ResponseEntity<List<CompanyResponse>>getCompaniesUser()
+    {
+        List<CompanyResponse>companyResponseList= companyService.getCompanies();
+        if(companyResponseList.isEmpty())
+        {
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<List<CompanyResponse>>(companyResponseList,HttpStatus.OK);
+    }
+    @DeleteMapping(value = "/delete/{id}")
+    public String deleteCompany(@PathVariable Long id){
+        return companyService.deleteCompany(id);
     }
 
 

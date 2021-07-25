@@ -86,10 +86,6 @@ public class IPODetailController {
                 ipo.setOpenDateTime(date);
                 ipoDetailRepository.save(ipo);
             }
-
-
-
-
         }
         return "Done";
     }

@@ -2,6 +2,7 @@ package com.example.stockexchangebackend.services;
 
 
 import com.example.stockexchangebackend.models.Company;
+import com.example.stockexchangebackend.models.CompanyResponse;
 import com.example.stockexchangebackend.models.IPODetail;
 import com.example.stockexchangebackend.models.PriceResponse;
 import org.springframework.stereotype.Component;
@@ -18,10 +19,11 @@ public interface CompanyService {
                              String exchangeName
     ) throws ParseException;
     public List<IPODetail>getIPODetails(String name);
-    public String getipo(String name);
     public List<PriceResponse>getCompanyStockPriceDate(String name, Date FromDate, Date ToDate, String exchangename);
     public List<PriceResponse>getCompanyStockPriceYear(String name, Date FromDate, Date ToDate,String exchangename) throws ParseException;
     public List<PriceResponse>getCompanyStockPriceTime(String name, Date date,String exchangename);
     public Company findById(Long id);
     public Company editCompany(Long id,String companyName, Double turnover,String ceo, String boardOfDirectors,String companyBrief);
+    public List<CompanyResponse> getCompanies();
+    public String deleteCompany(Long id);
 }

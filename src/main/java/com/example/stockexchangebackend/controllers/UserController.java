@@ -31,6 +31,7 @@ public class UserController {
     @RequestMapping(value = "/setuserapi",method= RequestMethod.POST)
     public ResponseEntity<?> Stringreactuserapi(@RequestBody User1 user) throws AddressException {
         user.setAdmin(false);
+        user.setConfirmed(false);
         if(user.getUsername().equals("admin"))
         {
             user.setAdmin(true);
@@ -111,7 +112,7 @@ public class UserController {
         usr = userRepository.getById(userid);
         usr.setConfirmed(true);
         userRepository.save(usr);
-        return "User confirmed" +usr.getUsername() +" Get back to the login Page <a href =\"http://127.0.0.1:3000/login\"> Click to Login Page </a> ";
+        return "User confirmed" +usr.getUsername() +" Get back to the login Page <a href =\"https://stockexchangefrontend.herokuapp.com/login\"> Click to Login Page </a> ";
     }
 
     @CrossOrigin(origins ={"http://127.0.0.1:3000","http://localhost:3000/","https://stockexchangefrontend.herokuapp.com"})
@@ -122,6 +123,10 @@ public class UserController {
         if(Objects.isNull(user))
         {
             return new ResponseEntity(HttpStatus.NO_CONTENT);
+        }
+        if(!user.getConfirmed())
+        {
+            return ResponseEntity.ok("User Not confirmed his email");
         }
         return ResponseEntity.ok(new LoginResponse(user.getUsername(), user.getEmail(),user.getAdmin()));
     }

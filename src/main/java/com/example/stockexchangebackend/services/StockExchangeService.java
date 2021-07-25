@@ -12,5 +12,5 @@ public interface StockExchangeService {
     public String addExchange(StockExchange stockExchange);
     public List<StockExchange> getExchange();
     public List<Company>getCompanies(String exchangename);
-    public String getipodetails(String name);
+
 }
