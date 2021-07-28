@@ -43,7 +43,7 @@ public class UserController {
     @Autowired
     JwtUtils jwtUtils;
 
-    private static final String API_KEY="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";
+    private static final String API_KEY="";
     @CrossOrigin(origins ={"http://127.0.0.1:3000","http://localhost:3000/","https://stockexchangefrontend.herokuapp.com"})
     @RequestMapping(value = "/setuserapi",method= RequestMethod.POST)
     public ResponseEntity<?> Stringreactuserapi(@RequestBody User1 user) throws AddressException, IOException {
