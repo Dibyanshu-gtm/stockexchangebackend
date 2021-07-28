@@ -1,14 +1,16 @@
 package com.example.stockexchangebackend.controllers;
 
 import com.example.stockexchangebackend.models.*;
-
+import com.sendgrid.*;
 import com.example.stockexchangebackend.repositories.RoleRepository;
 import com.example.stockexchangebackend.repositories.UserRepository;
 import com.example.stockexchangebackend.security.JwtUtils;
 import com.example.stockexchangebackend.security.UserDetailsImpl;
+import com.sendgrid.helpers.mail.Mail;
+import com.sendgrid.helpers.mail.objects.Content;
+import com.sendgrid.helpers.mail.objects.Email;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,12 +19,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.mail.Message;
-import javax.mail.Session;
-import javax.mail.Transport;
+
 import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -43,9 +43,10 @@ public class UserController {
     @Autowired
     JwtUtils jwtUtils;
 
+    private static final String API_KEY="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";
     @CrossOrigin(origins ={"http://127.0.0.1:3000","http://localhost:3000/","https://stockexchangefrontend.herokuapp.com"})
     @RequestMapping(value = "/setuserapi",method= RequestMethod.POST)
-    public ResponseEntity<?> Stringreactuserapi(@RequestBody User1 user) throws AddressException {
+    public ResponseEntity<?> Stringreactuserapi(@RequestBody User1 user) throws AddressException, IOException {
         user.setAdmin(false);
         user.setConfirmed(false);
         user.setPassword(encoder.encode(user.getPassword()));
@@ -91,52 +92,28 @@ public class UserController {
         return ResponseEntity.ok(new MessageResponse("User registered successfully! Check your email for confirmation link before login"));
     }
 
-    public void sendemail(Long userid) throws AddressException {
+    public void sendemail(Long userid) throws AddressException, IOException {
 
         User1 user = userRepository.getById(userid);
 
-        final String username = "thanos.starky@gmail.com";
-        final String password = "VKMKB123";
+        Email from = new Email("thanos.starky@gmail.com");
+        Email to = new Email(user.getEmail());
+        String subject ="Your StockApp Confirmation Link";
+        Content content = new Content("text/html", "<h1><a href =\"https://stockexchangebackend.herokuapp.com/auth/confirmuser/"+userid+"/\"> Click to confirm </a></h1>");
+        Mail mail = new Mail(from,subject,to,content);
+        SendGrid sg = new SendGrid(API_KEY);
+        Request request = new Request();
 
-        Properties prop = new Properties();
-        prop.put("mail.smtp.host", "smtp.gmail.com");
-        prop.put("mail.smtp.port", "587");
-        prop.put("mail.smtp.auth", "true");
-        prop.put("mail.smtp.starttls.enable", "true"); //TLS
-        prop.put("mail.smtp.ssl.protocols", "TLSv1.2");
+        request.setMethod(Method.POST);
+        request.setEndpoint("mail/send");
+        request.setBody(mail.build());
 
-        Session session = Session.getInstance(prop,
-                new javax.mail.Authenticator() {
-                    protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
-                        return new javax.mail.PasswordAuthentication(username, password);
-                    }
-                });
+        Response response = sg.api(request);
 
-        try {
+        System.out.println(response.getStatusCode());
+        System.out.println(response.getHeaders());
+        System.out.println(response.getBody());
 
-            Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress("thanos.starky@gmail.com"));
-            //message.setRecipients(
-            //	Message.RecipientType.TO,
-            //	InternetAddress.parse("sftrainerram@gmail.com")
-            //	);
-            message.setRecipients(
-                    Message.RecipientType.TO,
-                    InternetAddress.parse(user.getEmail())
-            );
-            message.setSubject("USer confirmation email");
-            //     message.setText("Dear Mail Crawler,"
-            //           + "\n\n Please do not spam my email!");
-            message.setContent(
-                    "<h1><a href =\"https://stockexchangebackend.herokuapp.com/auth/confirmuser/"+userid+"/\"> Click to confirm </a></h1>",
-                    "text/html");
-            Transport.send(message);
-
-            System.out.println("Done");
-
-        } catch (javax.mail.MessagingException e) {
-            e.printStackTrace();
-        }
     }
     @CrossOrigin(origins ={"http://localhost:3000","https://stockexchangefrontend.herokuapp.com"})
     @RequestMapping(value="/confirmuser/{userid}", method=RequestMethod.GET)
