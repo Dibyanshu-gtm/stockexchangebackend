@@ -1,10 +1,11 @@
 # Stock App
 
-Stock app is a simple Spring + React Application for storing Companies , Stock Exchanges and Sectors and then analyze their Stock rates. This **stockexchangebackend** repository is the backend Spring Boot part of the application. For the **React Front End** part , check [this](https://github.com/Dibyanshu-gtm/clientapp). In this repository, we use Java Spring Boot along with Spring Security JWT Security Token for Authorization. This app is also deployed in Heroku server 
+Stock app is a simple Spring + React Application for storing Companies , Stock Exchanges and Sectors and then analyze their Stock rates. This **stockexchangebackend** repository is the backend Spring Boot part of the application. For the **React Front End** part , check [this](https://github.com/Dibyanshu-gtm/clientapp). In this repository, we use Java Spring Boot along with Spring Security JWT Security Token for Authorization. This app is deployed on Heroku server. You can see the Eureka Server repository [here](https://github.com/Dibyanshu-gtm/eurekaserverstockapp) as well. 
 * Backend: https://stockexchangebackend.herokuapp.com
 * Frontend: https://stockexchangefrontend.herokuapp.com
+* EurekaServer https://eurekaserverstockapp.herokuapp.com/
 
-Screenshots of applications are added in Working and Postman folders respectiviely
+Screenshots of applications are included in Working and Postman folders respectively
 
 ## Technology Stack Used
 
