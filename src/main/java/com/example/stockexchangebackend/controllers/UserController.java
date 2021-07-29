@@ -43,7 +43,7 @@ public class UserController {
     @Autowired
     JwtUtils jwtUtils;
 
-    private static final String API_KEY="";
+
     @CrossOrigin(origins ={"http://127.0.0.1:3000","http://localhost:3000/","https://stockexchangefrontend.herokuapp.com"})
     @RequestMapping(value = "/setuserapi",method= RequestMethod.POST)
     public ResponseEntity<?> Stringreactuserapi(@RequestBody User1 user) throws AddressException, IOException {
@@ -101,7 +101,7 @@ public class UserController {
         String subject ="Your StockApp Confirmation Link";
         Content content = new Content("text/html", "<h1><a href =\"https://stockexchangebackend.herokuapp.com/auth/confirmuser/"+userid+"/\"> Click to confirm </a></h1>");
         Mail mail = new Mail(from,subject,to,content);
-        SendGrid sg = new SendGrid(API_KEY);
+        SendGrid sg = new SendGrid(System.getenv("API_KEY"));
         Request request = new Request();
 
         request.setMethod(Method.POST);
